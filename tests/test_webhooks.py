@@ -442,7 +442,9 @@ def test_window_fields_default_and_roundtrip(server):
         f"{server.base_url}/events/key/{event['idempotency_key']}"
     ).json()
     assert by_key["deliver_after"] == event["deliver_after"]
-    listed = httpx.get(f"{server.base_url}/events").json()
+    listed = httpx.get(
+        f"{server.base_url}/events", params={"limit": 200}
+    ).json()
     entry = [e for e in listed["events"] if e["id"] == event["id"]]
     assert entry and entry[0]["deliver_after"] == event["deliver_after"]
 
